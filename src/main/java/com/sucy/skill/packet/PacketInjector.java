@@ -30,13 +30,13 @@ public class PacketInjector {
 
         try {
             String nms = Reflection.getNMSPackage();
-            playerCon = Class.forName(nms + "EntityPlayer")
+            playerCon = SkillAPI.class.getClassLoader().loadClass(nms + "EntityPlayer")
                     .getField("playerConnection");
 
-            Class<?> playerConnection = Class.forName(nms + "PlayerConnection");
+            Class<?> playerConnection = SkillAPI.class.getClassLoader().loadClass(nms + "PlayerConnection");
             network = playerConnection.getField("networkManager");
 
-            Class<?> networkManager = Class.forName(nms + "NetworkManager");
+            Class<?> networkManager = SkillAPI.class.getClassLoader().loadClass(nms + "NetworkManager");
             try {
                 k = networkManager.getField("channel");
             } catch (Exception ex) {
@@ -44,7 +44,7 @@ public class PacketInjector {
                 k.setAccessible(true);
             }
 
-            handle = Class.forName(Reflection.getCraftPackage() + "entity.CraftPlayer").getMethod("getHandle");
+            handle = SkillAPI.class.getClassLoader().loadClass(Reflection.getCraftPackage() + "entity.CraftPlayer").getMethod("getHandle");
         } catch (Throwable t) {
             this.error();
             t.printStackTrace();
